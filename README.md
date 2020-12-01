@@ -3,8 +3,8 @@
 I'm playing with [PyTorch](http://pytorch.org/) on the CIFAR10 dataset.
 
 ## Prerequisites
-- Python 3.6+
-- PyTorch 1.0+
+- Python 3.6.4
+- PyTorch 0.4.0
 
 ## Training
 ```

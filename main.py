@@ -42,16 +42,6 @@ transform_test = transforms.Compose([
     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
 ])
 
-#trainset = torchvision.datasets.CIFAR10(
-#    root='./data', train=True, download=True, transform=transform_train)
-#trainloader = torch.utils.data.DataLoader(
-#    trainset, batch_size=128, shuffle=True, num_workers=2)
-
-#testset = torchvision.datasets.CIFAR10(
-#    root='./data', train=False, download=True, transform=transform_test)
-#testloader = torch.utils.data.DataLoader(
-#    testset, batch_size=100, shuffle=False, num_workers=2)
-
 classes = ('plane', 'car', 'bird', 'cat', 'deer',
            'dog', 'frog', 'horse', 'ship', 'truck')
 
@@ -75,21 +65,6 @@ testloader = torch.utils.data.DataLoader(
 
 # Model
 print('==> Building model..')
-# net = VGG('VGG19')
-# net = ResNet18()
-# net = PreActResNet18()
-# net = GoogLeNet()
-# net = DenseNet121()
-# net = ResNeXt29_2x64d()
-# net = MobileNet()
-# net = MobileNetV2()
-# net = DPN92()
-# net = ShuffleNetG2()
-# net = SENet18()
-# net = ShuffleNetV2(1)
-# net = EfficientNetB0()
-# net = RegNetX_200MF()
-# net = SimpleDLA()
 net = EightLayerNet()
 net = net.to(device)
 if device == 'cuda':
@@ -109,7 +84,6 @@ if args.resume:
 criterion = SCELoss(alpha=1, beta=0.01, num_classes=10)
 optimizer = optim.SGD(net.parameters(), lr=args.lr,
                       momentum=0.9, weight_decay=1e-4)
-#scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=120)
 fixed_cnn_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 40, gamma=0.1)
 
 # Training
@@ -120,7 +94,6 @@ def train(epoch):
     correct = 0
     total = 0
     for batch_idx, (inputs, targets) in enumerate(trainloader):
-    #for inputs, targets in tqdm(data_loader["train_dataset"]):
         inputs, targets = inputs.to(device), targets.to(device)
         optimizer.zero_grad()
         outputs = net(inputs)
@@ -187,7 +160,6 @@ writer.add_graph(net, input_tensor)
 for epoch in range(start_epoch, start_epoch+120):
     train(epoch)
     test(epoch)
-    #scheduler.step()
     fixed_cnn_scheduler.step()
 
 writer.close()
